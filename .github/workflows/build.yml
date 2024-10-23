@@ -17,12 +17,12 @@ jobs:
         run: mkdir -p debs  # 确保有一个 debs 目录
 
       - name: Install dpkg-dev
-        run: sudo apt-get install -y dpkg-dev
+        run: sudo apt-get update && sudo apt-get install -y dpkg-dev
 
       - name: Build Packages file
         run: |
-          # 假设您的 .deb 文件位于 debs 目录下
-          dpkg-scanpackages ./debs > Packages
+          # 扫描 debs 目录并生成 Packages 文件
+          dpkg-scanpackages ./debs /dev/null | gzip -9c > Packages.gz
 
       - name: List files for debugging
         run: ls -alh  # 列出当前目录中的文件以调试
@@ -34,6 +34,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add Packages Packages.bz2
+          git add Packages Packages.bz2 Packages.gz  # 添加新生成的 Packages.gz 文件
           git commit -m "Update Packages and Packages.bz2"
           git push
