@@ -29,6 +29,3 @@ jobs:
           git add Packages Packages.bz2
           git commit -m "Update Packages and Packages.bz2"
           git push
-# _config.yml
-source: .
-destination: ./_site
