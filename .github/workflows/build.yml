@@ -24,6 +24,9 @@ jobs:
           # 假设您的 .deb 文件位于 debs 目录下
           dpkg-scanpackages ./debs > Packages
 
+      - name: List files for debugging
+        run: ls -alh  # 列出当前目录中的文件以调试
+
       - name: Compress Packages file
         run: bzip2 Packages
 
