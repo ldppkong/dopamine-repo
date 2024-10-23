@@ -17,15 +17,20 @@ jobs:
         run: sudo apt-get install -y dpkg-dev
 
       - name: Build Packages file
-        run: dpkg-scanpackages ./debs > Packages  # 保证 debs 文件夹在仓库的根目录
+        run: dpkg-scanpackages ./debs > Packages  # 确保 debs 文件夹存在
 
       - name: Compress Packages file
         run: bzip2 Packages
 
+      - name: List files in directory  # 检查文件存在性
+        run: ls -la
+
       - name: Commit and push Packages files
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add Packages Packages.bz2
-          git commit -m "Update Packages and Packages.bz2"
-          git push
+          git commit -m "Update Packages and Packages.bz2" || echo "No changes to commit"
+          git push origin main  # 或者 master
